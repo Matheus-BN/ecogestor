@@ -4,16 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGestor - Gestão de Resíduos</title>
+    <!-- Adicione o favicon para melhorar a identidade visual -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <!-- CSS moderno com fallback -->
     <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Fonte do Google para melhor tipografia -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>♻ EcoGestor</h1>
-        <p>Transforme seu lixo em impacto positivo!</p>
+    <header class="main-header">
+        <div class="logo-container">
+            <h1>♻ EcoGestor</h1>
+            <p class="tagline">Transforme seu lixo em impacto positivo!</p>
+        </div>
     </header>
-    <main>
-        <a href="/mapa" class="btn">Ver Ecopontos</a>
-        <a href="/dashboard" class="btn">Meu Impacto</a>
+
+    <main class="landing-content">
+        <section class="cta-section">
+            <a href="/mapa" class="btn btn-primary">
+                <span class="icon">📍</span>
+                Ver Ecopontos
+            </a>
+            <a href="/dashboard" class="btn btn-secondary">
+                <span class="icon">📊</span>
+                Meu Impacto
+            </a>
+        </section>
+
+        <div class="eco-stats-preview">
+            <p>Já reciclamos <span class="highlight">1,240 kg</span> de resíduos este mês!</p>
+        </div>
     </main>
+
+    <footer class="main-footer">
+        <p>© 2023 EcoGestor | <a href="/sobre">Sobre o projeto</a></p>
+    </footer>
+
+    <!-- Scripts no final para melhor performance -->
+    <script>
+        // Exemplo: Animação básica ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('mouseover', () => {
+                    btn.style.transform = 'scale(1.05)';
+                });
+                btn.addEventListener('mouseout', () => {
+                    btn.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

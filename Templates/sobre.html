@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre o EcoGestor - Gestão de Resíduos</title>
+    <!-- Favicon e estilos consistentes -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos específicos para a página Sobre */
+        .about-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .mission-card, .team-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .team-member {
+            text-align: center;
+        }
+        
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+            border: 3px solid #2E8B57;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.5rem 1rem;
+            background-color: #2E8B57;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-container">
+            <h1>♻ EcoGestor</h1>
+            <p class="tagline">Transforme seu lixo em impacto positivo!</p>
+        </div>
+    </header>
+
+    <main class="about-container">
+        <section class="mission-card">
+            <h2>Nossa Missão</h2>
+            <p>O EcoGestor foi criado com o propósito de simplificar e incentivar a reciclagem, conectando pessoas a pontos de coleta e transformando hábitos de descarte em ações sustentáveis mensuráveis.</p>
+            
+            <h3>Como Funciona</h3>
+            <ol>
+                <li>Localize ecopontos próximos a você</li>
+                <li>Registre seus materiais reciclados</li>
+                <li>Acompanhe seu impacto ambiental</li>
+                <li>Contribua para um planeta mais limpo</li>
+            </ol>
+        </section>
+
+        <section class="stats-card">
+            <h2>Nosso Impacto</h2>
+            <div class="impact-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1,240+</span>
+                    <span class="stat-label">kg reciclados</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">42+</span>
+                    <span class="stat-label">usuários ativos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">ecopontos mapeados</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Substitua a seção <section class="team-card"> pelo seguinte código: -->
+<section class="team-card">
+    <h2>Conheça o Time</h2>
+    <div class="team-grid">
+        <div class="team-member">
+            <img src="/static/images/team1.jpg" alt="Foto de Matheus Barbosa">
+            <h3>Matheus Barbosa</h3>
+            <p>Desenvolvedor</p>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/team2.jpg" alt="Foto de Rafael Panella">
+            <h3>Rafael Panella</h3>
+            <p>Designer</p>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/team3.jpg" alt="Foto de Matheus Martins">
+            <h3>Matheus Martins</h3>
+            <p>Especialista Ambiental</p>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/team4.jpg" alt="Foto de Larissa Patricia">
+            <h3>Larissa Patricia</h3>
+            <p>Documentação</p>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/team5.jpg" alt="Foto de Matheus Nerez">
+            <h3>Matheus Nerez</h3>
+            <p>Consultor</p>
+        </div>
+    </div>
+</section>
+
+        <a href="/" class="back-button">← Voltar ao início</a>
+    </main>
+
+    <footer class="main-footer">
+        <p>© 2023 EcoGestor | <a href="/sobre">Sobre o projeto</a> | <a href="/privacidade">Política de Privacidade</a></p>
+    </footer>
+
+    <script>
+        // Efeito hover consistente com outras páginas
+        document.addEventListener('DOMContentLoaded', () => {
+            const backBtn = document.querySelector('.back-button');
+            if (backBtn) {
+                backBtn.addEventListener('mouseover', () => {
+                    backBtn.style.transform = 'scale(1.05)';
+                });
+                backBtn.addEventListener('mouseout', () => {
+                    backBtn.style.transform = 'scale(1)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

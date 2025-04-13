@@ -1,33 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Mapa EcoGestor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa EcoGestor - Pontos de Coleta</title>
+    <!-- Favicon consistente com o resto do site -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <!-- CSS do Leaflet com fallback local -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Fonte do Google para consistência visual -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Estilos customizados -->
     <style>
-        body { margin: 0; padding: 0; }
-        #map { height: 100vh; width: 100%; }
+        body { 
+            margin: 0; 
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        #map { 
+            height: 100vh; 
+            width: 100%;
+        }
+        
+        /* Estilo consistente para os popups */
+        .leaflet-popup-content {
+            font-family: 'Roboto', sans-serif;
+        }
+        .leaflet-popup-content b {
+            color: #2e8b57;
+        }
     </style>
 </head>
 <body>
+    <header class="map-header">
+        <div class="logo-container">
+            <h1>♻ EcoGestor Mapa</h1>
+            <p class="tagline">Encontre os ecopontos mais próximos de você!</p>
+        </div>
+    </header>
+
     <div id="map"></div>
 
-    <!-- Scripts -->
+    <footer class="map-footer">
+        <p>© 2023 EcoGestor | <a href="/">Voltar ao início</a></p>
+    </footer>
+
+    <!-- Scripts no final para melhor performance -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Dados do Flask
-        const ecopontos = JSON.parse('{{ ecopontos|tojson|safe }}');
-        
-        // Mapa
-        const map = L.map('map').setView([-23.5505, -46.6333], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dados do Flask
+            const ecopontos = JSON.parse('{{ ecopontos|tojson|safe }}');
+            
+            // Inicializa o mapa com visualização padrão para São Paulo
+            const map = L.map('map').setView([-23.5505, -46.6333], 13);
+            
+            // Adiciona layer do OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 18,
+                minZoom: 3
+            }).addTo(map);
 
-        // Marcadores
-        ecopontos.forEach(eco => {
-            L.marker([eco.lat, eco.lng])
-                .bindPopup(`<b>${eco.nome}</b><br>${eco.tipo}`)
-                .addTo(map);
+            // Adiciona marcadores para cada ecoponto
+            ecopontos.forEach(eco => {
+                const marker = L.marker([eco.lat, eco.lng], {
+                    title: eco.nome  // Acessibilidade
+                });
+                
+                marker.bindPopup(`
+                    <div class="popup-content">
+                        <h3>${eco.nome}</h3>
+                        <p><strong>Tipo:</strong> ${eco.tipo}</p>
+                        ${eco.endereco ? `<p><strong>Endereço:</strong> ${eco.endereco}</p>` : ''}
+                        ${eco.horario ? `<p><strong>Horário:</strong> ${eco.horario}</p>` : ''}
+                    </div>
+                `).addTo(map);
+                
+                // Efeito hover consistente com o site principal
+                marker.on('mouseover', () => {
+                    marker.openPopup();
+                });
+            });
+
+            // Se houver geolocalização, centraliza no usuário
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    map.setView([position.coords.latitude, position.coords.longitude], 15);
+                });
+            }
         });
     </script>
 </body>
