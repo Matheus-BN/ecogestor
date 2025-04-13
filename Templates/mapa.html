@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa EcoGestor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Dados do Flask
+        const ecopontos = JSON.parse('{{ ecopontos|tojson|safe }}');
+        
+        // Mapa
+        const map = L.map('map').setView([-23.5505, -46.6333], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Marcadores
+        ecopontos.forEach(eco => {
+            L.marker([eco.lat, eco.lng])
+                .bindPopup(`<b>${eco.nome}</b><br>${eco.tipo}`)
+                .addTo(map);
+        });
+    </script>
+</body>
+</html>
