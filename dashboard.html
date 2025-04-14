@@ -1,59 +1,253 @@
-<canvas id="impactoChart" aria-label="Gráfico de materiais reciclados" role="img"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    const ctx = document.getElementById('impactoChart');
-    
-    if (!ctx) return;
-    
-    try {
-      // Carrega dados dinamicamente
-      const response = await fetch('/api/reciclagem');
-      const chartData = await response.json();
-      
-      renderChart(ctx, chartData);
-    } catch (error) {
-      console.error("Erro:", error);
-      showFallbackMessage();
-    }
-  });
-
-  function renderChart(ctx, data) {
-    return new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.labels || ['Plástico', 'Vidro', 'Eletrônico'],
-        datasets: [{
-          label: 'kg Reciclados',
-          data: data.values || [12, 8, 5],
-          backgroundColor: [
-            '#2E8B57', '#3498DB', '#E74C3C'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: getChartOptions()
-    });
-  }
-
-  function getChartOptions() {
-    return {
-      responsive: true,
-      plugins: {
-        legend: { display: true },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}kg`
-          }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EcoGestor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        .dashboard-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-      },
-      scales: { y: { beginAtZero: true } }
-    };
-  }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2E8B57;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            color: #555;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            margin-top: 0;
+            color: #2C3E50;
+        }
+        
+        .progress-container {
+            margin-top: 1rem;
+        }
+        
+        progress {
+            width: 100%;
+            height: 20px;
+            border-radius: 10px;
+        }
+        
+        progress::-webkit-progress-bar {
+            background-color: #f3f3f3;
+            border-radius: 10px;
+        }
+        
+        progress::-webkit-progress-value {
+            background-color: #2E8B57;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-container">
+            <h1>♻ Dashboard EcoGestor</h1>
+            <p class="tagline">Seu impacto ambiental em números</p>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html" class="nav-link">Início</a></li>
+                <li><a href="mapa.html" class="nav-link">Mapa</a></li>
+                <li><a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a></li>
+                <li><a href="sobre.html" class="nav-link">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  function showFallbackMessage() {
-    const container = document.querySelector('#impactoChart').parentElement;
-    container.innerHTML = '<p>Não foi possível carregar o gráfico. Os dados de reciclagem estão disponíveis na tabela abaixo.</p>';
-  }
-</script>
+    <main class="dashboard-content">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="total-reciclado">0 kg</div>
+                <div class="stat-label">Total Reciclado</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="meta-mensal">2,000 kg</div>
+                <div class="stat-label">Meta Mensal</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="economia-agua">0 L</div>
+                <div class="stat-label">Água Economizada</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="redução-co2">0 kg</div>
+                <div class="stat-label">Redução de CO₂</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <h3>Progresso Mensal</h3>
+            <progress id="progresso-mensal" value="0" max="100"></progress>
+            <div id="progresso-texto" style="text-align: center; margin-top: 0.5rem;">0% da meta alcançada</div>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Materiais Reciclados</h2>
+            <canvas id="materiaisChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Histórico Mensal</h2>
+            <canvas id="historicoChart"></canvas>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>© <span id="current-year">2023</span> EcoGestor | <a href="sobre.html" style="color: white;">Sobre o projeto</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Atualiza o ano
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Destaca link ativo
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.href === window.location.href) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                }
+            });
+
+            // Dados de exemplo (substitua por fetch real)
+            const dados = {
+                totalReciclado: 1240,
+                metaMensal: 2000,
+                materiais: {
+                    labels: ['Plástico', 'Vidro', 'Metal', 'Papel', 'Eletrônicos'],
+                    valores: [450, 320, 280, 150, 40]
+                },
+                historico: {
+                    meses: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    valores: [800, 950, 1100, 1050, 1200, 1240]
+                }
+            };
+
+            // Atualiza stats
+            document.getElementById('total-reciclado').textContent = dados.totalReciclado.toLocaleString() + ' kg';
+            document.getElementById('economia-agua').textContent = (dados.totalReciclado * 10).toLocaleString() + ' L';
+            document.getElementById('redução-co2').textContent = (dados.totalReciclado * 0.5).toLocaleString() + ' kg';
+            
+            // Progresso
+            const progresso = Math.min((dados.totalReciclado / dados.metaMensal) * 100, 100);
+            document.getElementById('progresso-mensal').value = progresso;
+            document.getElementById('progresso-texto').textContent = `${progresso.toFixed(1)}% da meta alcançada`;
+
+            // Gráfico de Materiais
+            const ctxMateriais = document.getElementById('materiaisChart');
+            new Chart(ctxMateriais, {
+                type: 'doughnut',
+                data: {
+                    labels: dados.materiais.labels,
+                    datasets: [{
+                        data: dados.materiais.valores,
+                        backgroundColor: [
+                            '#2E8B57',
+                            '#3498DB',
+                            '#F1C40F',
+                            '#E74C3C',
+                            '#9B59B6'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw} kg (${((context.raw / dados.totalReciclado) * 100).toFixed(1)}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico Histórico
+            const ctxHistorico = document.getElementById('historicoChart');
+            new Chart(ctxHistorico, {
+                type: 'line',
+                data: {
+                    labels: dados.historico.meses,
+                    datasets: [{
+                        label: 'Kg Reciclados',
+                        data: dados.historico.valores,
+                        backgroundColor: 'rgba(46, 139, 87, 0.2)',
+                        borderColor: '#2E8B57',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Kg Reciclados'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Caso queira carregar de um JSON externo:
+            /*
+            fetch('data/dashboard.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Processar dados aqui
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar dados:", error);
+                });
+            */
+        });
+    </script>
+</body>
+</html>
