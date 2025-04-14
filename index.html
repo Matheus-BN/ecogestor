@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoGestor - Gestão de Resíduos</title>
-    <!-- Adicione o favicon para melhorar a identidade visual -->
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
-    <!-- CSS moderno com fallback -->
-    <link rel="stylesheet" href="/static/css/style.css">
-    <!-- Fonte do Google para melhor tipografia -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -17,15 +15,23 @@
             <h1>♻ EcoGestor</h1>
             <p class="tagline">Transforme seu lixo em impacto positivo!</p>
         </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/ecogestor/index.html" class="nav-link" id="nav-index">Início</a></li>
+                <li><a href="/ecogestor/mapa.html" class="nav-link" id="nav-mapa">Mapa</a></li>
+                <li><a href="/ecogestor/dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="/ecogestor/sobre.html" class="nav-link" id="nav-sobre">Sobre</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main class="landing-content">
         <section class="cta-section">
-            <a href="/mapa" class="btn btn-primary">
+            <a href="mapa.html" class="btn btn-primary">
                 <span class="icon">📍</span>
                 Ver Ecopontos
             </a>
-            <a href="/dashboard" class="btn btn-secondary">
+            <a href="dashboard.html" class="btn btn-secondary">
                 <span class="icon">📊</span>
                 Meu Impacto
             </a>
@@ -37,22 +43,19 @@
     </main>
 
     <footer class="main-footer">
-        <p>© 2023 EcoGestor | <a href="/sobre">Sobre o projeto</a></p>
+        <p>© <span id="current-year">2023</span> EcoGestor</p>
     </footer>
 
-    <!-- Scripts no final para melhor performance -->
     <script>
-        // Exemplo: Animação básica ao carregar
-        document.addEventListener('DOMContentLoaded', () => {
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('mouseover', () => {
-                    btn.style.transform = 'scale(1.05)';
-                });
-                btn.addEventListener('mouseout', () => {
-                    btn.style.transform = 'scale(1)';
-                });
-            });
+        // Atualiza o ano automaticamente
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Adiciona classe active ao link atual
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if(link.href === window.location.href) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            }
         });
     </script>
 </body>
