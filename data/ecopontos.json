@@ -1,19 +1,12 @@
-[
-    {
-        "nome": "Ecoponto Centro",
-        "lat": -23.5505,
-        "lng": -46.6333,
-        "tipo": "Recicláveis",
-        "endereco": "Rua Principal, 123",
-        "horario": "08h-18h (seg a sab)",
-        "observacao": "Trazer materiais limpos e separados"
+{
+    "totalReciclado": 1240,
+    "metaMensal": 2000,
+    "materiais": {
+        "labels": ["Plástico", "Vidro", "Metal", "Papel", "Eletrônicos"],
+        "valores": [450, 320, 280, 150, 40]
     },
-    {
-        "nome": "Ecoponto Eletrônicos",
-        "lat": -23.5632,
-        "lng": -46.6543,
-        "tipo": "Eletrônicos",
-        "endereco": "Av. Tecnologia, 456",
-        "horario": "09h-17h (ter a sex)"
+    "historico": {
+        "meses": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+        "valores": [800, 950, 1100, 1050, 1200, 1240]
     }
-]
+}
