@@ -3,12 +3,17 @@
         "nome": "Ecoponto Centro",
         "lat": -23.5505,
         "lng": -46.6333,
-        "tipo": "Recicláveis"
+        "tipo": "Recicláveis",
+        "endereco": "Rua Principal, 123",
+        "horario": "08h-18h (seg a sab)",
+        "observacao": "Trazer materiais limpos e separados"
     },
     {
-        "nome": "Ecoponto Parque",
-        "lat": -23.5600,
-        "lng": -46.6500,
-        "tipo": "Eletrônicos"
+        "nome": "Ecoponto Eletrônicos",
+        "lat": -23.5632,
+        "lng": -46.6543,
+        "tipo": "Eletrônicos",
+        "endereco": "Av. Tecnologia, 456",
+        "horario": "09h-17h (ter a sex)"
     }
 ]
