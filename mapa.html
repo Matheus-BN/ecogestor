@@ -10,36 +10,53 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            font-family: Arial, sans-serif;
         }
-
         #map {
-            height: 100vh;
+            height: calc(100vh - 80px);
             width: 100%;
+        }
+        .header {
+            padding: 10px 20px;
+            background: #2E8B57;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1 style="padding: 10px;">EcoGestor Mapa</h1>
-    <p style="padding: 10px;">Encontre os ecopontos mais próximos de você!</p>
+    <div class="header">
+        <h1>EcoGestor Mapa</h1>
+        <p>Encontre os ecopontos mais próximos de você!</p>
+    </div>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([-23.5505, -46.6333], 13);
+        // Inicialização mais robusta com tratamento de erros
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const map = L.map('map').setView([-23.5505, -46.6333], 13);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+                // Dados embutidos (não precisa de arquivo JSON)
+                const ecopontos = [
+                    { nome: "Centro", lat: -23.5505, lng: -46.6333, tipo: "Recicláveis" },
+                    { nome: "Parque", lat: -23.5632, lng: -46.6543, tipo: "Eletrônicos" }
+                ];
 
-        const ecopontos = [
-            { nome: "Centro", lat: -23.5505, lng: -46.6333, tipo: "Recicláveis" },
-            { nome: "Parque", lat: -23.5632, lng: -46.6543, tipo: "Eletrônicos" }
-        ];
+                ecopontos.forEach(ponto => {
+                    L.marker([ponto.lat, ponto.lng])
+                        .bindPopup(`<strong>${ponto.nome}</strong><br>${ponto.tipo}`)
+                        .addTo(map);
+                });
 
-        ecopontos.forEach(ponto => {
-            L.marker([ponto.lat, ponto.lng])
-                .bindPopup(`<strong>${ponto.nome}</strong><br>${ponto.tipo}`)
-                .addTo(map);
+            } catch (error) {
+                console.error("Erro ao carregar o mapa:", error);
+                alert("Ocorreu um erro ao carregar o mapa. Por favor, tente recarregar a página.");
+            }
         });
     </script>
 </body>
