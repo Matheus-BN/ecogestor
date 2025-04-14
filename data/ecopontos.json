@@ -1,0 +1,14 @@
+[
+    {
+        "nome": "Ecoponto Centro",
+        "lat": -23.5505,
+        "lng": -46.6333,
+        "tipo": "Recicláveis"
+    },
+    {
+        "nome": "Ecoponto Parque",
+        "lat": -23.5600,
+        "lng": -46.6500,
+        "tipo": "Eletrônicos"
+    }
+]
