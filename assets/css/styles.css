@@ -10,7 +10,24 @@ body {
     padding: 0;
     line-height: 1.6;
 }
+.btn-readme {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #2E8B57;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
 
+.btn-readme:hover {
+    background-color: #3CB371;
+    transform: translateY(-2px);
+}
 .main-header {
     background-color: var(--primary-color);
     color: white;
