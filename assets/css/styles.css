@@ -213,3 +213,16 @@ body {
     background-color: #3aa76d;
     box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3);
 }
+.forest-background {
+    width: 100%;
+    height: 250px; /* Altura da imagem - ajuste conforme necessário */
+    background-image: url('../images/florest.jpg'); /* Caminho da imagem */
+    background-size: cover; /* Cobrir todo o espaço */
+    background-position: center; /* Centralizar a imagem */
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+.forest-background {
+    min-height: 250px; /* Garante altura mínima */
+    background-color: #e0f7fa; /* Cor de fallback */
+}
