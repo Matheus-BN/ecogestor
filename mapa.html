@@ -23,7 +23,7 @@
         #map {
             flex-grow: 1;
             width: 100%;
-            min-height: 300px; /* Altura mínima */
+            min-height: 300px;
         }
         .footer {
             padding: 10px;
@@ -43,6 +43,21 @@
         .back-button:hover {
             background: #3CB371;
         }
+        /* Estilo para o popup expandido */
+        .ecoponto-details {
+            max-width: 250px;
+        }
+        .ecoponto-details h3 {
+            margin-top: 0;
+            color: #2E8B57;
+        }
+        .ecoponto-details p {
+            margin: 5px 0;
+        }
+        .horario {
+            font-weight: bold;
+            color: #2E8B57;
+        }
     </style>
 </head>
 <body>
@@ -57,26 +72,98 @@
         <button class="back-button" onclick="window.history.back()">Voltar</button>
     </div>
 
+    <!-- Elemento de áudio oculto -->
+    <audio id="markerSound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3" preload="auto"></audio>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const map = L.map('map').setView([-23.5505, -46.6333], 13);
+                const audio = document.getElementById('markerSound');
                 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
 
-                // Dados embutidos
+                // Dados embutidos com mais detalhes
                 const ecopontos = [
-                    { nome: "Centro", lat: -23.5505, lng: -46.6333, tipo: "Recicláveis" },
-                    { nome: "Parque", lat: -23.5632, lng: -46.6543, tipo: "Eletrônicos" }
+                    { 
+                        nome: "Ecoponto Centro", 
+                        lat: -23.5505, 
+                        lng: -46.6333, 
+                        tipo: "Recicláveis", 
+                        endereco: "Rua Principal, 123 - Centro",
+                        horario: "Seg-Sex: 8h-18h | Sáb: 9h-13h",
+                        materiais: "Papel, Plástico, Metal, Vidro",
+                        telefone: "(11) 1234-5678"
+                    },
+                    { 
+                        nome: "Ecoponto Parque", 
+                        lat: -23.5632, 
+                        lng: -46.6543, 
+                        tipo: "Eletrônicos", 
+                        endereco: "Av. do Parque, 456",
+                        horario: "Ter-Dom: 9h-17h",
+                        materiais: "Computadores, Celulares, Eletrodomésticos",
+                        telefone: "(11) 9876-5432"
+                    },
+                    { 
+                        nome: "Ecoponto Zona Norte", 
+                        lat: -23.5150, 
+                        lng: -46.6250,
+                        tipo: "Recicláveis e Óleo", 
+                        endereco: "Rua das Flores, 789 - Santana",
+                        horario: "Qua-Seg: 7h-19h",
+                        materiais: "Papel, Plástico, Metal, Vidro, Óleo de Cozinha",
+                        telefone: "(11) 2468-1357"
+                    },
+                    { 
+                        nome: "Ecoponto Zona Sul", 
+                        lat: -23.6500, 
+                        lng: -46.7000,
+                        tipo: "Resíduos Eletrônicos", 
+                        endereco: "Av. Paulista, 1001 - Jardins",
+                        horario: "Seg-Sab: 10h-20h",
+                        materiais: "Eletrônicos, Pilhas, Baterias, Lâmpadas",
+                        telefone: "(11) 3691-2580"
+                    },
+                    { 
+                        nome: "Ecoponto Leste", 
+                        lat: -23.5400, 
+                        lng: -46.4800,
+                        tipo: "Recicláveis Diversos", 
+                        endereco: "Rua das Árvores, 200 - Tatuapé",
+                        horario: "Ter-Dom: 9h-16h",
+                        materiais: "Todos os materiais recicláveis",
+                        telefone: "(11) 3579-2468"
+                    }
                 ];
 
                 ecopontos.forEach(ponto => {
-                    L.marker([ponto.lat, ponto.lng])
-                        .bindPopup(`<strong>${ponto.nome}</strong><br>${ponto.tipo}`)
-                        .addTo(map);
+                    const marker = L.marker([ponto.lat, ponto.lng]);
+                    
+                    // HTML detalhado para o popup
+                    const popupContent = `
+                        <div class="ecoponto-details">
+                            <h3>${ponto.nome}</h3>
+                            <p><strong>Tipo:</strong> ${ponto.tipo}</p>
+                            <p><strong>Endereço:</strong> ${ponto.endereco}</p>
+                            <p class="horario">${ponto.horario}</p>
+                            <p><strong>Materiais aceitos:</strong> ${ponto.materiais}</p>
+                            <p><strong>Telefone:</strong> ${ponto.telefone}</p>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupContent);
+                    
+                    // Evento de clique para tocar o som
+                    marker.on('click', function() {
+                        audio.currentTime = 0; // Reinicia o som se já estiver tocando
+                        audio.play().catch(e => console.log("Não foi possível reproduzir o som:", e));
+                    });
+                    
+                    marker.addTo(map);
                 });
 
             } catch (error) {
