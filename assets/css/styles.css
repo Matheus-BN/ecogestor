@@ -226,3 +226,31 @@ body {
     min-height: 250px; /* Garante altura mínima */
     background-color: #e0f7fa; /* Cor de fallback */
 }
+.google-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: white;
+    color: #757575;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+    margin: 1rem auto;
+    max-width: 300px;
+    border: 1px solid #ddd;
+}
+
+.google-login:hover {
+    background: #f5f5f5;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
+.material-icons {
+    font-size: 20px;
+    color: #4285F4; /* Azul do Google */
+}
