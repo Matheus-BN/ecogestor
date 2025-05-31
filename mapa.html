@@ -5,143 +5,435 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EcoGestor Mapa</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #FFD700;
+            --light-color: #F5F5F5;
+            --dark-color: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
+            color: var(--dark-color);
+            background-color: var(--light-color);
         }
+        
         .header {
-            padding: 10px 20px;
-            background: #2E8B57;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             flex-shrink: 0;
+            text-align: center;
+            box-shadow: var(--shadow);
         }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+        
         #map {
             flex-grow: 1;
             width: 100%;
             min-height: 300px;
+            z-index: 1;
         }
+        
         .footer {
-            padding: 10px;
-            background: #f0f0f0;
+            padding: 15px;
+            background: var(--dark-color);
             text-align: center;
             flex-shrink: 0;
+            color: white;
+            font-size: 0.9rem;
         }
+        
         .back-button {
-            padding: 8px 16px;
-            background: #2E8B57;
+            padding: 10px 20px;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
+        
         .back-button:hover {
-            background: #3CB371;
+            background: var(--secondary-color);
+            transform: translateY(-2px);
         }
+        
         /* Estilo para o popup expandido */
         .ecoponto-details {
-            max-width: 250px;
+            max-width: 280px;
+            padding: 10px;
         }
+        
         .ecoponto-details h3 {
             margin-top: 0;
-            color: #2E8B57;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
         }
+        
         .ecoponto-details p {
-            margin: 5px 0;
+            margin: 8px 0;
+            line-height: 1.4;
         }
+        
+        .ecoponto-details strong {
+            color: var(--primary-color);
+        }
+        
         .horario {
             font-weight: bold;
-            color: #2E8B57;
+            color: var(--secondary-color);
+            background-color: rgba(60, 179, 113, 0.1);
+            padding: 5px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .materiais-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .materiais-list li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .materiais-list li:before {
+            content: "✓";
+            color: var(--secondary-color);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .contact-info {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 100px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            font-size: 0.8rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .legend {
+                bottom: 80px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>EcoGestor Mapa</h1>
-        <p>Encontre os ecopontos mais próximos de você!</p>
+        <h1><i class="fas fa-recycle"></i> EcoGestor Mapa</h1>
+        <p>Encontre os ecopontos mais próximos de você e ajude a preservar o meio ambiente!</p>
     </div>
     
     <div id="map"></div>
     
     <div class="footer">
-        <button class="back-button" onclick="window.history.back()">Voltar</button>
+        <button class="back-button" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Voltar</button>
+        <p style="margin-top: 10px;">© 2023 EcoGestor - Todos os direitos reservados</p>
     </div>
 
     <!-- Elemento de áudio oculto -->
     <audio id="markerSound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3" preload="auto"></audio>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                const map = L.map('map').setView([-23.5505, -46.6333], 13);
+                const map = L.map('map').setView([-23.5505, -46.6333], 12);
                 const audio = document.getElementById('markerSound');
                 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
 
-                // Dados embutidos com mais detalhes
+                // Ícones personalizados para diferentes tipos de ecopontos
+                const iconReciclaveis = L.divIcon({
+                    className: 'custom-icon',
+                    html: '<i class="fas fa-recycle" style="color: #2E8B57; font-size: 24px;"></i>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                const iconEletronicos = L.divIcon({
+                    className: 'custom-icon',
+                    html: '<i class="fas fa-laptop" style="color: #4169E1; font-size: 24px;"></i>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                const iconOleo = L.divIcon({
+                    className: 'custom-icon',
+                    html: '<i class="fas fa-oil-can" style="color: #8B4513; font-size: 24px;"></i>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                const iconPilhas = L.divIcon({
+                    className: 'custom-icon',
+                    html: '<i class="fas fa-battery-three-quarters" style="color: #FF4500; font-size: 24px;"></i>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+                
+                const iconCompostagem = L.divIcon({
+                    className: 'custom-icon',
+                    html: '<i class="fas fa-leaf" style="color: #228B22; font-size: 24px;"></i>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                // Dados embutidos com 15 ecopontos
                 const ecopontos = [
                     { 
                         nome: "Ecoponto Centro", 
                         lat: -23.5505, 
                         lng: -46.6333, 
                         tipo: "Recicláveis", 
-                        endereco: "Rua Principal, 123 - Centro",
-                        horario: "Seg-Sex: 8h-18h | Sáb: 9h-13h",
-                        materiais: "Papel, Plástico, Metal, Vidro",
-                        telefone: "(11) 1234-5678"
+                        endereco: "Rua Principal, 123 - Centro, São Paulo/SP",
+                        horario: "Segunda a Sexta: 8h às 18h | Sábado: 9h às 13h",
+                        materiais: ["Papel", "Plástico", "Metal", "Vidro", "Embalagens longa vida"],
+                        telefone: "(11) 1234-5678",
+                        email: "centro@ecogestor.com.br",
+                        icon: iconReciclaveis
                     },
                     { 
                         nome: "Ecoponto Parque", 
                         lat: -23.5632, 
                         lng: -46.6543, 
                         tipo: "Eletrônicos", 
-                        endereco: "Av. do Parque, 456",
-                        horario: "Ter-Dom: 9h-17h",
-                        materiais: "Computadores, Celulares, Eletrodomésticos",
-                        telefone: "(11) 9876-5432"
+                        endereco: "Av. do Parque, 456 - Jardins, São Paulo/SP",
+                        horario: "Terça a Domingo: 9h às 17h",
+                        materiais: ["Computadores", "Celulares", "Eletrodomésticos", "Cabos", "Pilhas e Baterias"],
+                        telefone: "(11) 9876-5432",
+                        email: "parque@ecogestor.com.br",
+                        icon: iconEletronicos
                     },
                     { 
                         nome: "Ecoponto Zona Norte", 
                         lat: -23.5150, 
                         lng: -46.6250,
                         tipo: "Recicláveis e Óleo", 
-                        endereco: "Rua das Flores, 789 - Santana",
-                        horario: "Qua-Seg: 7h-19h",
-                        materiais: "Papel, Plástico, Metal, Vidro, Óleo de Cozinha",
-                        telefone: "(11) 2468-1357"
+                        endereco: "Rua das Flores, 789 - Santana, São Paulo/SP",
+                        horario: "Quarta a Segunda: 7h às 19h",
+                        materiais: ["Papel", "Plástico", "Metal", "Vidro", "Óleo de Cozinha"],
+                        telefone: "(11) 2468-1357",
+                        email: "norte@ecogestor.com.br",
+                        icon: iconOleo
                     },
                     { 
                         nome: "Ecoponto Zona Sul", 
                         lat: -23.6500, 
                         lng: -46.7000,
                         tipo: "Resíduos Eletrônicos", 
-                        endereco: "Av. Paulista, 1001 - Jardins",
-                        horario: "Seg-Sab: 10h-20h",
-                        materiais: "Eletrônicos, Pilhas, Baterias, Lâmpadas",
-                        telefone: "(11) 3691-2580"
+                        endereco: "Av. Paulista, 1001 - Jardins, São Paulo/SP",
+                        horario: "Segunda a Sábado: 10h às 20h",
+                        materiais: ["Eletrônicos", "Pilhas", "Baterias", "Lâmpadas", "Toner de impressora"],
+                        telefone: "(11) 3691-2580",
+                        email: "sul@ecogestor.com.br",
+                        icon: iconEletronicos
                     },
                     { 
                         nome: "Ecoponto Leste", 
                         lat: -23.5400, 
                         lng: -46.4800,
                         tipo: "Recicláveis Diversos", 
-                        endereco: "Rua das Árvores, 200 - Tatuapé",
-                        horario: "Ter-Dom: 9h-16h",
-                        materiais: "Todos os materiais recicláveis",
-                        telefone: "(11) 3579-2468"
+                        endereco: "Rua das Árvores, 200 - Tatuapé, São Paulo/SP",
+                        horario: "Terça a Domingo: 9h às 16h",
+                        materiais: ["Todos os materiais recicláveis", "Óleo de cozinha", "Eletrônicos pequenos"],
+                        telefone: "(11) 3579-2468",
+                        email: "leste@ecogestor.com.br",
+                        icon: iconReciclaveis
+                    },
+                    { 
+                        nome: "Ecoponto Vila Mariana", 
+                        lat: -23.5874, 
+                        lng: -46.6356,
+                        tipo: "Pilhas e Baterias", 
+                        endereco: "Rua Domingos de Morais, 1000 - Vila Mariana, São Paulo/SP",
+                        horario: "Segunda a Sexta: 7h30 às 17h30",
+                        materiais: ["Pilhas alcalinas", "Baterias de celular", "Baterias de notebook", "Baterias automotivas"],
+                        telefone: "(11) 5555-1234",
+                        email: "vilamariana@ecogestor.com.br",
+                        icon: iconPilhas
+                    },
+                    { 
+                        nome: "Ecoponto Mooca", 
+                        lat: -23.5586, 
+                        lng: -46.6008,
+                        tipo: "Compostagem", 
+                        endereco: "Rua da Mooca, 2300 - Mooca, São Paulo/SP",
+                        horario: "Quinta a Terça: 8h às 16h",
+                        materiais: ["Resíduos orgânicos", "Restos de alimentos", "Podas de jardim"],
+                        telefone: "(11) 2222-3333",
+                        email: "mooca@ecogestor.com.br",
+                        icon: iconCompostagem
+                    },
+                    { 
+                        nome: "Ecoponto Pinheiros", 
+                        lat: -23.5679, 
+                        lng: -46.6926,
+                        tipo: "Recicláveis", 
+                        endereco: "Rua dos Pinheiros, 500 - Pinheiros, São Paulo/SP",
+                        horario: "Todos os dias: 7h às 22h",
+                        materiais: ["Papel", "Plástico", "Metal", "Vidro", "Isopor"],
+                        telefone: "(11) 7777-8888",
+                        email: "pinheiros@ecogestor.com.br",
+                        icon: iconReciclaveis
+                    },
+                    { 
+                        nome: "Ecoponto Ipiranga", 
+                        lat: -23.5852, 
+                        lng: -46.6064,
+                        tipo: "Óleo e Eletrônicos", 
+                        endereco: "Av. Dom Pedro I, 200 - Ipiranga, São Paulo/SP",
+                        horario: "Segunda a Sexta: 9h às 18h | Sábado: 9h às 13h",
+                        materiais: ["Óleo de cozinha", "Eletrônicos pequenos", "Lâmpadas fluorescentes"],
+                        telefone: "(11) 4444-5555",
+                        email: "ipiranga@ecogestor.com.br",
+                        icon: iconOleo
+                    },
+                    { 
+                        nome: "Ecoponto Santo Amaro", 
+                        lat: -23.6497, 
+                        lng: -46.7172,
+                        tipo: "Eletrônicos", 
+                        endereco: "Av. Adolfo Pinheiro, 100 - Santo Amaro, São Paulo/SP",
+                        horario: "Terça a Domingo: 10h às 19h",
+                        materiais: ["Computadores", "Monitores", "Impressoras", "Tablets", "Celulares"],
+                        telefone: "(11) 6666-7777",
+                        email: "santoamaro@ecogestor.com.br",
+                        icon: iconEletronicos
+                    },
+                    // NOVOS ECOPOSTOS ADICIONADOS (11-15)
+                    { 
+                        nome: "Ecoponto Barra Funda", 
+                        lat: -23.5265, 
+                        lng: -46.6678,
+                        tipo: "Recicláveis e Móveis", 
+                        endereco: "Rua Apa, 300 - Barra Funda, São Paulo/SP",
+                        horario: "Segunda a Sábado: 8h às 17h",
+                        materiais: ["Móveis usados", "Madeira", "Metais", "Plásticos rígidos"],
+                        telefone: "(11) 3333-4444",
+                        email: "barrafunda@ecogestor.com.br",
+                        icon: iconReciclaveis
+                    },
+                    { 
+                        nome: "Ecoponto Saúde", 
+                        lat: -23.6105, 
+                        lng: -46.6302,
+                        tipo: "Medicamentos e Resíduos Hospitalares", 
+                        endereco: "Av. Jabaquara, 1500 - Saúde, São Paulo/SP",
+                        horario: "Segunda a Sexta: 9h às 16h",
+                        materiais: ["Medicamentos vencidos", "Seringas", "Agulhas", "Resíduos de saúde"],
+                        telefone: "(11) 8888-9999",
+                        email: "saude@ecogestor.com.br",
+                        icon: iconPilhas
+                    },
+                    { 
+                        nome: "Ecoponto Perdizes", 
+                        lat: -23.5423, 
+                        lng: -46.6745,
+                        tipo: "Compostagem Comunitária", 
+                        endereco: "Rua Turiassu, 800 - Perdizes, São Paulo/SP",
+                        horario: "Quarta a Domingo: 7h às 12h",
+                        materiais: ["Resíduos orgânicos", "Folhas secas", "Cascas de frutas/legumes"],
+                        telefone: "(11) 1010-2020",
+                        email: "perdizes@ecogestor.com.br",
+                        icon: iconCompostagem
+                    },
+                    { 
+                        nome: "Ecoponto Liberdade", 
+                        lat: -23.5618, 
+                        lng: -46.6365,
+                        tipo: "Eletrônicos e Lâmpadas", 
+                        endereco: "Rua da Glória, 200 - Liberdade, São Paulo/SP",
+                        horario: "Terça a Domingo: 10h às 18h",
+                        materiais: ["Eletrônicos", "Lâmpadas LED", "Lâmpadas fluorescentes", "Baterias"],
+                        telefone: "(11) 3030-4040",
+                        email: "liberdade@ecogestor.com.br",
+                        icon: iconEletronicos
+                    },
+                    { 
+                        nome: "Ecoponto Butantã", 
+                        lat: -23.5712, 
+                        lng: -46.7085,
+                        tipo: "Óleo e Recicláveis", 
+                        endereco: "Av. Vital Brasil, 500 - Butantã, São Paulo/SP",
+                        horario: "Segunda a Sexta: 7h às 19h | Sábado: 8h às 13h",
+                        materiais: ["Óleo de cozinha", "Plástico", "Vidro", "Metal", "Papel"],
+                        telefone: "(11) 5050-6060",
+                        email: "butanta@ecogestor.com.br",
+                        icon: iconOleo
                     }
                 ];
 
                 ecopontos.forEach(ponto => {
-                    const marker = L.marker([ponto.lat, ponto.lng]);
+                    const marker = L.marker([ponto.lat, ponto.lng], {icon: ponto.icon});
                     
                     // HTML detalhado para o popup
                     const popupContent = `
@@ -149,9 +441,15 @@
                             <h3>${ponto.nome}</h3>
                             <p><strong>Tipo:</strong> ${ponto.tipo}</p>
                             <p><strong>Endereço:</strong> ${ponto.endereco}</p>
-                            <p class="horario">${ponto.horario}</p>
-                            <p><strong>Materiais aceitos:</strong> ${ponto.materiais}</p>
-                            <p><strong>Telefone:</strong> ${ponto.telefone}</p>
+                            <p class="horario"><i class="fas fa-clock"></i> ${ponto.horario}</p>
+                            <p><strong>Materiais aceitos:</strong></p>
+                            <ul class="materiais-list">
+                                ${ponto.materiais.map(material => `<li>${material}</li>`).join('')}
+                            </ul>
+                            <div class="contact-info">
+                                <p><strong><i class="fas fa-phone"></i> Telefone:</strong> ${ponto.telefone}</p>
+                                <p><strong><i class="fas fa-envelope"></i> Email:</strong> ${ponto.email}</p>
+                            </div>
                         </div>
                     `;
                     
@@ -159,12 +457,28 @@
                     
                     // Evento de clique para tocar o som
                     marker.on('click', function() {
-                        audio.currentTime = 0; // Reinicia o som se já estiver tocando
+                        audio.currentTime = 0;
                         audio.play().catch(e => console.log("Não foi possível reproduzir o som:", e));
                     });
                     
                     marker.addTo(map);
                 });
+
+                // Adicionando legenda
+                const legend = L.control({position: 'bottomright'});
+                legend.onAdd = function(map) {
+                    const div = L.DomUtil.create('div', 'legend');
+                    div.innerHTML = `
+                        <h4 style="margin-top:0; color: var(--primary-color);">Legenda:</h4>
+                        <div class="legend-item"><div class="legend-color" style="background: #2E8B57;"></div> Recicláveis</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #4169E1;"></div> Eletrônicos</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #8B4513;"></div> Óleo</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #FF4500;"></div> Pilhas/Baterias</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #228B22;"></div> Compostagem</div>
+                    `;
+                    return div;
+                };
+                legend.addTo(map);
 
             } catch (error) {
                 console.error("Erro ao carregar o mapa:", error);
