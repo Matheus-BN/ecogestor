@@ -7,7 +7,285 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Gerais */
+        :root {
+            --primary: #2E8B57;
+            --primary-light: #4CAF50;
+            --secondary: #FFC107;
+            --dark: #263238;
+            --light: #f5f7fa;
+            --overlay: rgba(46, 139, 87, 0.85);
+        }
+        
+         body {
+            background: url('https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+        
+        body::before {
+            background: rgba(46, 139, 87, 0.82); /* Overlay médio */
+        }
+        
+        /* Ajustes no header para melhor contraste */
+        .main-header {
+            background-color: rgba(255, 255, 255, 0.98);
+        }
+        
+        /* Header Aprimorado */
+        .main-header {
+            padding: 1.5rem 2rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-container h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-container .tagline {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #5a6f66;
+            font-weight: 300;
+        }
+        
+        /* Navegação Premium */
+        .main-nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border-radius: 30px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-light);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+        
+        .nav-link .icon {
+            font-size: 1.1rem;
+        }
+        
+        /* Conteúdo Principal */
+        .landing-content {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+        
+        .hero-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        /* Botões CTA */
+        .cta-section {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a9d63;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-light);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .btn .icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Estatísticas */
+        .eco-stats-preview {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 500px;
+            margin: 2rem auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .eco-stats-preview p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        
+        /* Footer */
+        .main-footer {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .main-footer p {
+            margin: 0;
+        }
+        
+        /* Botão Flutuante */
+        .btn-readme {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+        
+        .btn-readme:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px) scale(1.05);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .main-nav ul {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+            
+            .cta-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -15,20 +293,22 @@
             <h1>♻ EcoGestor</h1>
             <p class="tagline">Transforme seu lixo em impacto positivo!</p>
         </div>
-        <nav class="main-nav">
+        <nav class="main-nav" aria-label="Navegação principal">
             <ul>
-                <li><a href="index.html" class="nav-link" id="nav-index">Início</a></li>
-                <li><a href="mapa.html" class="nav-link" id="nav-mapa">Mapa</a></li>
-                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a></li>
-                <li><a href="sobre.html" class="nav-link" id="nav-sobre">Sobre</a></li>
+                <li><a href="index.html" class="nav-link" id="nav-index"><span class="icon">🏠</span>Início</a></li>
+                <li><a href="mapa.html" class="nav-link" id="nav-mapa"><span class="icon">🗺️</span>Mapa</a></li>
+                <li><a href="dashboard.html" class="nav-link" id="nav-dashboard"><span class="icon">📊</span>Dashboard</a></li>
+                <li><a href="sobre.html" class="nav-link" id="nav-sobre"><span class="icon">ℹ️</span>Sobre</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="landing-content">
-        <section class="florest-background"></section>
-        <img src="assets/images/florest.jpg" alt="Floresta" style="width:100%">
+        <section class="hero-section">
+            <h2>Gestão Inteligente de Resíduos</h2>
+            <p>Conectamos você aos ecopontos mais próximos e ajudamos a monitorar seu impacto ambiental de forma simples e eficiente.</p>
         </section>
+
         <section class="cta-section">
             <a href="mapa.html" class="btn btn-primary">
                 <span class="icon">📍</span>
@@ -46,7 +326,7 @@
     </main>
 
     <footer class="main-footer">
-        <p>© <span id="current-year">2023</span> EcoGestor</p>
+        <p>© <span id="current-year">2023</span> EcoGestor | Todos os direitos reservados</p>
     </footer>
 
     <script>
@@ -61,10 +341,11 @@
             }
         });
     </script>
+    
     <a href="https://github.com/Matheus-BN/ecogestor/blob/main/README.md" 
-   target="_blank"
-   class="btn btn-readme">
-   📚 Ver Documentação
-</a>
+       target="_blank"
+       class="btn-readme">
+       📚 Ver Documentação
+    </a>
 </body>
 </html>

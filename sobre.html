@@ -9,14 +9,70 @@
     <link rel="stylesheet" href="/ecogestor/assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* Novo estilo para o body com imagem de fundo */
+        body {
+            background-image: url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f0f0f0; /* Fallback */
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Adicionando overlay para melhor legibilidade */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        /* Ajustando os containers para ficarem sobre o overlay */
+        .main-header {
+            padding: 1rem;
+            text-align: center;
+            background-color: #2E8B57;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo-container {
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .main-header h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin: 0;
+            white-space: nowrap;
+        }
+        
+        .tagline {
+            margin: 0.5rem 0 0;
+            font-size: clamp(0.9rem, 3vw, 1.2rem);
+            font-weight: 400;
+        }
+
         /* Estilos específicos para a página Sobre */
         .about-container {
             max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
         
-        .mission-card, .team-card {
+        .mission-card, .team-card, .stats-card {
             background: #f9f9f9;
             border-radius: 8px;
             padding: 1.5rem;
@@ -57,6 +113,25 @@
         
         .back-button:hover {
             transform: scale(1.05);
+        }
+
+        /* Estilos para as estatísticas */
+        .impact-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2E8B57;
         }
     </style>
 </head>
@@ -100,37 +175,36 @@
             </div>
         </section>
 
-        <!-- Substitua a seção <section class="team-card"> pelo seguinte código: -->
-<section class="team-card">
-    <h2>Conheça o Time</h2>
-    <div class="team-grid">
-        <div class="team-member">
-            <img src="/static/images/team1.jpg" alt="Foto de Matheus Barbosa">
-            <h3>Matheus Barbosa</h3>
-            <p>Desenvolvedor</p>
-        </div>
-        <div class="team-member">
-            <img src="/static/images/team2.jpg" alt="Foto de Rafael Panella">
-            <h3>Rafael Panella</h3>
-            <p>Designer</p>
-        </div>
-        <div class="team-member">
-            <img src="/static/images/team3.jpg" alt="Foto de Matheus Martins">
-            <h3>Matheus Martins</h3>
-            <p>Especialista Ambiental</p>
-        </div>
-        <div class="team-member">
-            <img src="/static/images/team4.jpg" alt="Foto de Larissa Patricia">
-            <h3>Larissa Patricia</h3>
-            <p>Documentação</p>
-        </div>
-        <div class="team-member">
-            <img src="/static/images/team5.jpg" alt="Foto de Matheus Nerez">
-            <h3>Matheus Nerez</h3>
-            <p>Consultor</p>
-        </div>
-    </div>
-</section>
+        <section class="team-card">
+            <h2>Conheça o Time</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="/assets/images/team1.jpg" alt="Foto de Matheus Barbosa">
+                    <h3>Matheus Barbosa</h3>
+                    <p>Desenvolvedor</p>
+                </div>
+                <div class="team-member">
+                    <img src="/assets/images/team2.jpg" alt="Foto de Rafael Panella">
+                    <h3>Rafael Panella</h3>
+                    <p>Designer</p>
+                </div>
+                <div class="team-member">
+                    <img src="/assets/images/team3.jpg" alt="Foto de Matheus Martins">
+                    <h3>Matheus Martins</h3>
+                    <p>Especialista Ambiental</p>
+                </div>
+                <div class="team-member">
+                    <img src="/assets/images/team4.jpg" alt="Foto de Larissa Patricia">
+                    <h3>Larissa Patricia</h3>
+                    <p>Documentação</p>
+                </div>
+                <div class="team-member">
+                    <img src="/assets/images/team5.jpg" alt="Foto de Matheus Nerez">
+                    <h3>Matheus Nerez</h3>
+                    <p>Consultor</p>
+                </div>
+            </div>
+        </section>
 
         <a href="/" class="back-button">← Voltar ao início</a>
     </main>
